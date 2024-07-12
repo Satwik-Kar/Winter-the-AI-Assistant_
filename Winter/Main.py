@@ -5,8 +5,6 @@ import sys
 from Winter import Winter
 import os
 
-os.environ['HF_TOKEN'] = "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"
-os.environ['HUGGINGFACEHUB_API_TOKEN'] = "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"
 location = geocoder.ip('me')
 weather_data = None
 is_next_round = False
@@ -38,7 +36,7 @@ def fetch_weather():
         print(f"Failed to fetch data: {response.status_code}")
 
 
-def main():
+def main(from_wake_word):
     import nltk
     from nltk.tokenize import word_tokenize, sent_tokenize
     nltk.download('punkt')
@@ -102,9 +100,12 @@ def main():
             print(f"Error formatting transcription: {e}")
 
     global is_next_round
-    knox = Winter()
-    welcomeLine = knox.start()
-    knox.speak(welcomeLine)
+    winter = Winter()
+    welcomeLine = winter.start()
+
+    if not from_wake_word:
+        winter.speak(welcomeLine)
+
     if weather_data is not None:
         questions = [
             "What can I do for you today?",
@@ -129,11 +130,11 @@ def main():
         weather_desc = weather_data['weather'][0]['description']
         wind_speed = mph_to_kph(weather_data['wind']['speed'])
         celsius = kelvin_to_celsius(temperature)
-        knox.speak("Today's temperature is " + celsius + " degree celsius, at " + city)
-        knox.speak("Wind speed is " + wind_speed + " kilometer, per hour.")
-        knox.speak("There is a " + weather_desc)
+        winter.speak("Today's temperature is " + celsius + " degree celsius, at " + city)
+        winter.speak("Wind speed is " + wind_speed + " kilometer, per hour.")
+        winter.speak("There is a " + weather_desc)
         random_no = random.randint(0, len(questions) - 1)
-        knox.speak(questions[random_no])
+        winter.speak(questions[random_no])
     introduce_keywords = {
         "name", "who are", "call", "introduce", "yourself", "ai"
     }
@@ -148,42 +149,41 @@ def main():
 
     while True:
 
-        response = knox.recognize(is_next_round)
+        response = winter.recognize(is_next_round)
 
         if response["success"]:
             transcriptionFormatted = str(format_transcription(response["transcription"]))
             transcription = str(response["transcription"])
-            knox.speak("You said: " + transcriptionFormatted)
+            winter.speak("You said: " + transcriptionFormatted)
             words = set(transcription.lower().split())
-            if "none" in words:
-                knox.speak("You said nothing.")
-                knox.sleep()
+            if "none" or "no" in words:
+                winter.sleep()
                 break
 
             elif introduce_keywords.intersection(words) and stop_keywords.intersection(words):
-                knox.speak("I detected conflicting commands. Please clarify.")
+                winter.speak("I detected conflicting commands. Please clarify.")
 
             elif introduce_keywords.intersection(words):
-                knox.speak(f"I am {knox.name}! Your assistant.")
+                winter.speak(f"I am {winter.name}! Your assistant.")
 
             elif stop_keywords.intersection(words):
-                knox.speak("Stopping the assistant.")
-                knox.sleep()
+                winter.speak("Stopping the assistant.")
+                winter.sleep()
                 break
             elif kill_keywords.intersection(words):
-                knox.speak("Killing my service.")
-                knox.kill()
+                winter.speak("Killing my service.")
+                winter.kill()
                 sys.exit()
             elif is_question(transcription):
 
                 answer = question_answering(transcriptionFormatted)
-                knox.speak(answer)
+                winter.speak(answer)
             is_next_round = True
         elif response["error"]:
             print("ERROR: " + response["error"])
-            knox.speak("I couldn't understand what you said. Please try again.")
+            winter.speak("I couldn't understand what you said. Please try again.")
 
 
 if __name__ == "__main__":
     # fetch_weather()
-    main()
+    main(from_wake_word=False)

@@ -1,21 +1,21 @@
+import io
 import random
 import sys
 
+from gtts import gTTS
 from playsound import playsound
 import threading
 
 import speech_recognition as sr
-from gtts import gTTS
 from pydub import AudioSegment
 from pydub.playback import play
-import io
 
 
 class Winter:
     def __init__(self):
         self.microphone = None
         self.recognizer = None
-        self.name = "Parth"
+        self.name = "Winter"
         self.version = "1.0"
         self.rise_music_url = 'sounds/rise.mp3'
         self.fall_music_url = 'sounds/fall.mp3'
@@ -43,7 +43,6 @@ class Winter:
         ]
 
         index = random.randint(0, len(welcome_lines) - 1)
-        playsound(self.rise_music_url)
         return welcome_lines[index]
 
     def speak(self, text):
@@ -108,6 +107,30 @@ class Winter:
         return response
 
     def sleep(self):
+        self.__play(self.fall_music_url)
+        self.is_awake = False
+        self.listen_for_wake_word()
+
+    def listen_for_wake_word(self):
+        print("Listening for wake word...")
+        while not self.is_awake:
+            with self.microphone as source:
+                self.recognizer.adjust_for_ambient_noise(source)
+                audio = self.recognizer.listen(source)
+
+            try:
+                transcription = self.recognizer.recognize_google(audio).lower()
+                print(transcription)
+                if self.name.lower() in transcription:
+                    self.is_awake = True
+                    import Main
+                    Main.main(from_wake_word=True)
+            except sr.UnknownValueError:
+                continue
+            except sr.RequestError:
+                continue
+
+    def kill(self):
         goodbye_greetings = [
             "Goodbye! Have a wonderful day!",
             "See you later! Take care!",
@@ -127,29 +150,5 @@ class Winter:
         ]
         random_no = random.randint(0, len(goodbye_greetings) - 1)
         self.speak(goodbye_greetings[random_no])
-        self.__play(self.fall_music_url)
-        self.is_awake = False
-        self.listen_for_wake_word()
-
-    def listen_for_wake_word(self):
-        print("Listening for wake word...")
-        while not self.is_awake:
-            with self.microphone as source:
-                self.recognizer.adjust_for_ambient_noise(source)
-                audio = self.recognizer.listen(source)
-
-            try:
-                transcription = self.recognizer.recognize_google(audio).lower()
-                print(transcription)
-                if self.name.lower() in transcription:
-                    self.is_awake = True
-                    import Main
-                    Main.main()
-            except sr.UnknownValueError:
-                continue
-            except sr.RequestError:
-                continue
-
-    @staticmethod
-    def kill():
+        playsound(self.fall_music_url)
         sys.exit(0)
