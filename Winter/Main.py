@@ -1,3 +1,5 @@
+import datetime
+
 import geocoder
 import requests
 import random
@@ -83,9 +85,9 @@ def main(from_wake_word):
 
                 # Add punctuation and capitalize
                 if isQuestion:
-                    formatted_sentence = sentence.strip() + "?"
+                    formatted_sentence = sentence.strip() + " ?"
                 else:
-                    formatted_sentence = sentence.strip() + "."
+                    formatted_sentence = sentence.strip() + " ."
 
                 # Capitalize first letter
                 formatted_sentence = formatted_sentence.capitalize()
@@ -98,6 +100,19 @@ def main(from_wake_word):
             return formatted_transcription
         except Exception as e:
             print(f"Error formatting transcription: {e}")
+
+    def in_there(smaller_chunks, large_string):
+        found = False
+        for chunk in smaller_chunks:
+            if chunk in large_string:
+                found = True
+                print(chunk)
+                break
+
+        if found:
+            return True
+        else:
+            return False
 
     global is_next_round
     winter = Winter()
@@ -144,7 +159,27 @@ def main(from_wake_word):
         "leave", "log out", "shut down", "turn off", "see you"
     }
     kill_keywords = {
-        "kill", "service"
+        'kill', 'service'
+    }
+    asking_time_keywords = {
+        "what time", "when", "at what time", "time is it", "current time",
+        "now", "right now", "exact time", "clock", "o'clock",
+        "am", "pm", "midnight", "noon", "early", "late"
+    }
+    asking_date_keywords = {
+        "what date", "which date", "today's date", "current date",
+        "date is it", "date today", "on which date"
+    }
+    asking_day_keywords = {"what day", "which day", "day is it", "today", "tomorrow", "yesterday",
+                           "day of the week", "day today", "weekday", "weekend"
+                           }
+    asking_month_keywords = {
+        "what month", "which month", "month is it", "current month",
+        "month today", "month are we in"
+    }
+    asking_year_keywords = {
+        "what year", "which year", "year is it", "current year",
+        "year today", "year are we in"
     }
 
     while True:
@@ -155,25 +190,58 @@ def main(from_wake_word):
             transcriptionFormatted = str(format_transcription(response["transcription"]))
             transcription = str(response["transcription"])
             winter.speak("You said: " + transcriptionFormatted)
-            words = set(transcription.lower().split())
-            if "none" or "no" in words:
+            words = transcription.lower()
+            print(words)
+            if "none" in words:
                 winter.sleep()
                 break
 
-            elif introduce_keywords.intersection(words) and stop_keywords.intersection(words):
+            elif in_there(introduce_keywords, words) and in_there(stop_keywords, words):
                 winter.speak("I detected conflicting commands. Please clarify.")
 
-            elif introduce_keywords.intersection(words):
+            elif in_there(introduce_keywords, words):
                 winter.speak(f"I am {winter.name}! Your assistant.")
 
-            elif stop_keywords.intersection(words):
-                winter.speak("Stopping the assistant.")
+            elif in_there(stop_keywords, words):
                 winter.sleep()
                 break
-            elif kill_keywords.intersection(words):
+            elif in_there(kill_keywords, words):
                 winter.speak("Killing my service.")
                 winter.kill()
                 sys.exit()
+            elif in_there(asking_time_keywords, words):
+                now = datetime.datetime.now()
+                hour = now.strftime("%I")
+                minute = now.strftime("%M")
+                am_pm = now.strftime("%p").lower()
+
+                if minute == "00":
+                    speakable_time = f"It's {hour} o'clock {am_pm}."
+                else:
+                    speakable_time = f"It's {hour}:{minute} {am_pm}."
+
+                winter.speak(speakable_time)
+            elif asking_day_keywords.intersection(words):
+                now = datetime.datetime.now()
+                day = now.strftime("%A")
+                winter.speak(f"Today is {day}.")
+
+            elif asking_date_keywords.intersection(words):
+                now = datetime.datetime.now()
+                day = now.strftime("%d").lstrip('0')
+                month = now.strftime("%B")
+                year = now.strftime("%Y")
+
+                speakable_date = f"Today is {month} {day}, {year}."
+                winter.speak(speakable_date)
+            elif asking_year_keywords.intersection(words):
+                now = datetime.datetime.now()
+                year = now.strftime("%Y")
+                winter.speak(f"The current year is {year}.")
+            elif asking_month_keywords.intersection(words):
+                now = datetime.datetime.now()
+                month = now.strftime("%B")
+                winter.speak(f"The current month is {month}.")
             elif is_question(transcription):
 
                 answer = question_answering(transcriptionFormatted)

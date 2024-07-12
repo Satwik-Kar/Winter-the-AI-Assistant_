@@ -45,7 +45,8 @@ class Winter:
         index = random.randint(0, len(welcome_lines) - 1)
         return welcome_lines[index]
 
-    def speak(self, text):
+    @staticmethod
+    def speak(text):
         try:
             tts = gTTS(text=text, lang="en-IN")
             audio_fp = io.BytesIO()
