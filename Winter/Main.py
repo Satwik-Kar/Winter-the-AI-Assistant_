@@ -167,7 +167,7 @@ def main(from_wake_word):
                 winter.sleep()
                 break
 
-            elif in_there(key.introduce_keywords, words) and in_there(stop_keywords, words):
+            elif in_there(key.introduce_keywords, words) and in_there(key.stop_keywords, words):
                 winter.speak("I detected conflicting commands. Please clarify.")
 
             elif in_there(key.introduce_keywords, words):
@@ -414,8 +414,6 @@ def main(from_wake_word):
                 response = res.specific_technology_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-
-
             elif is_question(transcription):
                 answer = question_answering(transcriptionFormatted)
                 winter.speak(answer)
