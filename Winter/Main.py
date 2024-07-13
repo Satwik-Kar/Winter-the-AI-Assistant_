@@ -215,345 +215,206 @@ def main(from_wake_word):
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(f"{response[random_no]}")
             elif in_there(key.time_based_greetings_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.time_based_greetings_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.inquiry_greetings_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.inquiry_greetings_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.formal_greetings_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.formal_greetings_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.simple_thanks_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.simple_thanks_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.emphatic_thanks_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.emphatic_thanks_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.appreciation_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.appreciation_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.simple_apology_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.simple_apology_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.formal_apology_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.formal_apology_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.simple_confirmation_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.simple_confirmation_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.emphatic_confirmation_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.emphatic_confirmation_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.formal_confirmation_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.formal_confirmation_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.simple_rejection_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.simple_rejection_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.emphatic_rejection_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.emphatic_rejection_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.polite_rejection_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.polite_rejection_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.current_weather_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.current_weather_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.future_weather_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.future_weather_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.weather_conditions_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.weather_conditions_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.simple_help_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.simple_help_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.request_help_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.request_help_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.polite_help_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.polite_help_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.general_feedback_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.general_feedback_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.criticism_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.criticism_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.advice_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.advice_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.current_location_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.current_location_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.find_location_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.find_location_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.specific_location_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.specific_location_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.basic_personal_info_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.basic_personal_info_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.origin_personal_info_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.origin_personal_info_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.professional_personal_info_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.professional_personal_info_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.interest_personal_info_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.interest_personal_info_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.general_jokes_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.general_jokes_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.specific_jokes_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.specific_jokes_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.general_news_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.general_news_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.specific_news_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.specific_news_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.general_music_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.general_music_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.specific_music_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.specific_music_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.music_preference_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.music_preference_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.general_sports_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.general_sports_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.sports_updates_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.sports_updates_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.sports_entities_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.sports_entities_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.specific_sports_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.specific_sports_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.general_movie_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.general_movie_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.recommendation_movie_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.recommendation_movie_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.specific_movie_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.specific_movie_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.general_food_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.preparation_food_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.dining_food_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.preference_food_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.general_shopping_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.online_shopping_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.deal_shopping_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.product_shopping_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.general_health_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.medical_health_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.fitness_health_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.nutrition_health_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.general_education_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.institution_education_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.task_education_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.subject_education_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.general_travel_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.specific_travel_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.booking_travel_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.general_food_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
+            elif in_there(key.recommendation_food_keywords, words):
+                response = res.recommendation_food_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
+            elif in_there(key.specific_food_keywords, words):
+                response = res.specific_food_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.general_technology_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.device_technology_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.component_technology_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.general_technology_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
+            elif in_there(key.recommendation_technology_keywords, words):
+                response = res.recommendation_technology_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
             elif in_there(key.specific_technology_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.general_finance_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.investment_finance_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.management_finance_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.loan_finance_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.general_relationship_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.personal_relationship_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.romantic_relationship_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.general_motivation_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.affirmation_motivation_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.goal_motivation_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.general_fashion_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.clothing_fashion_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.accessory_fashion_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.event_fashion_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.general_hobbies_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.creative_hobbies_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.physical_hobbies_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
-            elif in_there(key.intellectual_hobbies_keywords, words):
-                now = datetime.datetime.now()
-                month = now.strftime("%B")
-                winter.speak(f"The current month is {month}.")
+                response = res.specific_technology_responses
+                random_no = random.randint(0, len(response) - 1)
+                winter.speak(response[random_no])
+
 
             elif is_question(transcription):
                 answer = question_answering(transcriptionFormatted)
