@@ -63,49 +63,51 @@ class Winter:
     def __play(file):
         threading.Thread(target=playsound, args=(file,)).start()
 
-    def recognize(self, next_round):
+    def recognize(self, next_round, ask_anything_else):
 
         with self.microphone as source:
+
             if next_round:
-                anything_else = [
-                    "Is there anything else I can help you with?",
-                    "Do you need assistance with anything else?",
-                    "Can I assist you with something else?",
-                    "Is there anything more you need?",
-                    "Do you need help with anything else?",
-                    "Is there anything further you require?",
-                    "Anything else you'd like assistance with?",
-                    "Do you have any other requests?",
-                    "Is there something more I can do for you?",
-                    "Any other questions or concerns?",
-                    "Would you like help with anything else?",
-                    "Is there another way I can assist you?",
-                    "Do you have any other needs?",
-                    "Anything else I can support you with?",
-                    "Do you need anything else from me?"
-                ]
-                random_no = random.randint(0, len(anything_else) - 1)
-                self.speak(anything_else[random_no])
+                if ask_anything_else:
+                    anything_else = [
+                        "Is there anything else I can help you with?",
+                        "Do you need assistance with anything else?",
+                        "Can I assist you with something else?",
+                        "Is there anything more you need?",
+                        "Do you need help with anything else?",
+                        "Is there anything further you require?",
+                        "Anything else you'd like assistance with?",
+                        "Do you have any other requests?",
+                        "Is there something more I can do for you?",
+                        "Any other questions or concerns?",
+                        "Would you like help with anything else?",
+                        "Is there another way I can assist you?",
+                        "Do you have any other needs?",
+                        "Anything else I can support you with?",
+                        "Do you need anything else from me?"
+                    ]
+                    random_no = random.randint(0, len(anything_else) - 1)
+                    self.speak(anything_else[random_no])
 
             self.recognizer.adjust_for_ambient_noise(source)
             print("Listening...")
             self.__play(self.rise_music_url)
             audio = self.recognizer.listen(source)
 
-        response = {
-            "success": True,
-            "error": None,
-            "transcription": None
-        }
-        try:
-            response["transcription"] = self.recognizer.recognize_google(audio)
-        except sr.RequestError:
-            response["success"] = False
-            response["error"] = "API unavailable"
-        except sr.UnknownValueError:
-            response["error"] = "Unable to recognize speech"
+            response = {
+                "success": True,
+                "error": None,
+                "transcription": None
+            }
+            try:
+                response["transcription"] = self.recognizer.recognize_google(audio)
+            except sr.RequestError:
+                response["success"] = False
+                response["error"] = "API unavailable"
+            except sr.UnknownValueError:
+                response["error"] = "Unable to recognize speech"
 
-        return response
+            return response
 
     def sleep(self):
         self.__play(self.fall_music_url)

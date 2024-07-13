@@ -1,18 +1,22 @@
 import datetime
+import threading
 
 import geocoder
 import requests
 import random
 import sys
+
+import Screen
 from Winter import Winter
 import os
 import keywords as key
 import responses as res
+from transformers import pipeline
+from Screen import Dot
 
 location = geocoder.ip('me')
 weather_data = None
 is_next_round = False
-from transformers import pipeline
 
 
 def kelvin_to_celsius(kelvin):
@@ -152,10 +156,11 @@ def main(from_wake_word):
         winter.speak("There is a " + weather_desc)
         random_no = random.randint(0, len(questions) - 1)
         winter.speak(questions[random_no])
+    ask_anything_else = True
 
     while True:
 
-        response = winter.recognize(is_next_round)
+        response = winter.recognize(is_next_round, ask_anything_else)
 
         if response["success"]:
             transcriptionFormatted = str(format_transcription(response["transcription"]))
@@ -214,6 +219,7 @@ def main(from_wake_word):
                 response = res.simple_greetings_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(f"{response[random_no]}")
+                ask_anything_else = False
             elif in_there(key.time_based_greetings_keywords, words):
                 response = res.time_based_greetings_responses
                 random_no = random.randint(0, len(response) - 1)
@@ -425,4 +431,6 @@ def main(from_wake_word):
 
 if __name__ == "__main__":
     # fetch_weather()
-    main(from_wake_word=False)
+    assistant_thread = threading.Thread(target=main, args=(False,))
+    assistant_thread.start()
+    Screen.main()
