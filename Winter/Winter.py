@@ -80,7 +80,8 @@ class Winter:
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                pygame.quit()
+                self.kill()
 
         # Clear the screen
         self.screen.fill(self.BLACK)
@@ -186,7 +187,7 @@ class Winter:
             self.recognizer.adjust_for_ambient_noise(source)
             print("Listening...")
             self.__play(self.rise_music_url)
-            audio = self.recognizer.listen(source)
+            audio = self.recognizer.listen(source, timeout=10)
 
             response = {
                 "success": True,

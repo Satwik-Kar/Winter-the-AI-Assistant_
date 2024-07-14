@@ -431,4 +431,3 @@ if __name__ == "__main__":
     # fetch_weather()
     assistant_thread = threading.Thread(target=main, args=(False,))
     assistant_thread.start()
-
