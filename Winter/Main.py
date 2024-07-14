@@ -5,14 +5,11 @@ import geocoder
 import requests
 import random
 import sys
-
-import Screen
 from Winter import Winter
 import os
 import keywords as key
 import responses as res
 from transformers import pipeline
-from Screen import Dot
 
 location = geocoder.ip('me')
 weather_data = None
@@ -159,6 +156,7 @@ def main(from_wake_word):
     ask_anything_else = True
 
     while True:
+        winter.show_screen()
 
         response = winter.recognize(is_next_round, ask_anything_else)
 
@@ -433,4 +431,4 @@ if __name__ == "__main__":
     # fetch_weather()
     assistant_thread = threading.Thread(target=main, args=(False,))
     assistant_thread.start()
-    Screen.main()
+
