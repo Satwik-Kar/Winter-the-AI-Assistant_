@@ -68,16 +68,17 @@ class Winter:
         messages = ["Hello!", "I am Knox.", "How can I assist you today?", "Weather forecast is available.",
                     "Ask me anything!"]
         message_index = 0
-        char_index = 0
         message_timer = 0
 
         # Prepare text rendering
         font = pygame.font.SysFont(None, 48)
-        text = ""
-        text_rect = pygame.Rect(WIDTH // 2, HEIGHT // 2, 0, 0)
+        text = self.message
+        text_surface = font.render(text, True, WHITE)
+        text_rect = text_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2))
 
         # Create dots around the text
         dots = self.create_dots_around_text(text_rect)
+
         while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -92,23 +93,18 @@ class Winter:
                 dot.pulse()
                 dot.draw(screen)
 
-            # Update text typing effect
-            if char_index < len(self.message):
-                message_timer += 1
-                if message_timer > 5:  # Adjust the speed of the typing effect
-                    text += self.message[char_index]
-                    char_index += 1
-                    message_timer = 0
+            # Update the display text
+            screen.blit(text_surface, text_rect)
+
+            # Pause before showing the next message
+            message_timer += 1
+            if message_timer > 240:  # Adjust the pause duration as needed
+                message_index = (message_index + 1) % len(messages)
+                text = self.message
                 text_surface = font.render(text, True, WHITE)
                 text_rect = text_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2))
-                screen.blit(text_surface, text_rect)
-            else:
-                if message_timer > 120:  # Pause before showing the next message
-                    message_index = (message_index + 1) % len(messages)
-                    char_index = 0
-                    text = ""
-                    message_timer = 0
-                    dots = self.create_dots_around_text(text_rect)
+                dots = self.create_dots_around_text(text_rect)
+                message_timer = 0
 
             # Update the display
             pygame.display.flip()
@@ -119,7 +115,7 @@ class Winter:
     # Quit Pygame
     def start_show_screen_thread(self):
         show_screen_thread = threading.Thread(target=self.show_screen)
-        show_screen_thread.daemon = True  # Ensures the thread will close when the main program exits
+        show_screen_thread.daemon = True
         show_screen_thread.start()
 
     def start(self):
