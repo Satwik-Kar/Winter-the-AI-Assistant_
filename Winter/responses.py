@@ -20,6 +20,26 @@ formal_greetings_responses = [
     "Hello! How may I assist you?",
     "Greetings! How may I help you?"
 ]
+filemanager_successful_responses = [
+    "Opening the file manager.",
+    "Here are your files.",
+    "File manager is now open.",
+    "Displaying your files.",
+    "File explorer is open now.",
+    "Opening your file directory.",
+    "File manager opened successfully.",
+    "Here are your folders."
+]
+filemanager_unsuccessful_responses = [
+    "I'm sorry, I couldn't open the file manager.",
+    "Unable to open the file manager.",
+    "I encountered an issue opening the file manager.",
+    "The file manager couldn't be opened.",
+    "Something went wrong while trying to open the file manager.",
+    "I couldn't access the file manager. Please try again.",
+    "Failed to open the file manager.",
+    "I'm having trouble opening your files. Please try again later."
+]
 
 # Simple Thanks Responses
 simple_thanks_responses = [

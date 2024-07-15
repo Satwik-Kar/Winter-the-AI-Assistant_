@@ -66,9 +66,6 @@ class Winter:
         WHITE = (255, 255, 255)
         BLUE = (0, 150, 255)
         clock = pygame.time.Clock()
-        messages = ["Hello!", "I am Knox.", "How can I assist you today?", "Weather forecast is available.",
-                    "Ask me anything!"]
-        message_index = 0
         message_timer = 0
 
         # Prepare text rendering
@@ -99,25 +96,11 @@ class Winter:
             screen.blit(message_text_surface, message_text_rect)
             screen.blit(status_text_surface, status_text_rect)
 
-            # Pause before showing the next message
-            message_timer += 1
-            # if message_timer > 240:  # Adjust the pause duration as needed
-            #     message_index = (message_index + 1) % len(messages)
-            #
-            #     message_text_surface = font.render(self.message, True, WHITE)
-            #     status_text_surface = font.render(self.status, True, WHITE)
-            #
-            #     message_text_rect = message_text_surface.get_rect(center=(WIDTH // 2, HEIGHT // 1.2))
-            #     status_text_rect = status_text_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2))
-            #
-            #     dots = self.create_dots_around_text(status_text_rect)
-            #     message_timer = 0
-
             # Update the display
             pygame.display.flip()
 
             # Cap the frame rate
-            clock.tick(120)
+            clock.tick(60)
 
     # Quit Pygame
     def start_show_screen_thread(self):
@@ -151,6 +134,7 @@ class Winter:
 
     def speak(self, text):
         try:
+            self.status = "Speaking..."
             self.message = text
             tts = gTTS(text=text, lang="en-IN")
             audio_fp = io.BytesIO()

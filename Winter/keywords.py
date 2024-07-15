@@ -37,6 +37,15 @@ simple_greetings_keywords = {
 time_based_greetings_keywords = {
     "good morning", "good afternoon", "good evening"
 }
+file_manager_keywords = {
+    "open file manager",
+    "open files",
+    "show files",
+    "open explorer",
+    "open finder",
+    "open directory",
+    "open folder"
+}
 
 inquiry_greetings_keywords = {
     "how are you", "how's it going", "what's up"

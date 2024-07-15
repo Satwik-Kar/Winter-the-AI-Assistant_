@@ -1,4 +1,6 @@
 import datetime
+import platform
+import subprocess
 import threading
 
 import geocoder
@@ -119,6 +121,8 @@ def main(from_wake_word):
 
     global is_next_round
     winter = Winter()
+    winter.start_show_screen_thread()
+
     welcomeLine = winter.start()
 
     if not from_wake_word:
@@ -154,7 +158,6 @@ def main(from_wake_word):
         random_no = random.randint(0, len(questions) - 1)
         winter.speak(questions[random_no])
     ask_anything_else = True
-    winter.start_show_screen_thread()
     while True:
 
         response = winter.recognize(is_next_round, ask_anything_else)
@@ -166,7 +169,27 @@ def main(from_wake_word):
             words = transcription.lower()
             print(words)
             if "none" in words:
+                def open_file_manager(path="."):
+                    # Get the absolute path
+                    abs_path = os.path.abspath(path)
+
+                    # Identify the platform and use the appropriate command
+                    system = platform.system()
+                    try:
+                        if system == "Windows":
+                            os.startfile(abs_path)
+                        elif system == "Darwin":  # macOS
+                            subprocess.run(["open", abs_path])
+                        elif system == "Linux":
+                            subprocess.run(["xdg-open", abs_path])
+                        else:
+                            raise NotImplementedError(f"Unsupported platform: {system}")
+                    except Exception as e:
+                        print(f"Failed to open file manager: {e}")
+
+                open_file_manager()
                 winter.sleep()
+
                 break
 
             elif in_there(key.introduce_keywords, words) and in_there(key.stop_keywords, words):
@@ -370,51 +393,24 @@ def main(from_wake_word):
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
             elif in_there(key.sports_updates_keywords, words):
-                response = res.sports_updates_responses
+                response = res.general_sports_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
             elif in_there(key.sports_entities_keywords, words):
-                response = res.sports_entities_responses
+                response = res.general_sports_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
             elif in_there(key.specific_sports_keywords, words):
-                response = res.specific_sports_responses
+                response = res.general_sports_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.general_movie_keywords, words):
-                response = res.general_movie_responses
-                random_no = random.randint(0, len(response) - 1)
-                winter.speak(response[random_no])
-            elif in_there(key.recommendation_movie_keywords, words):
-                response = res.recommendation_movie_responses
-                random_no = random.randint(0, len(response) - 1)
-                winter.speak(response[random_no])
-            elif in_there(key.specific_movie_keywords, words):
-                response = res.specific_movie_responses
-                random_no = random.randint(0, len(response) - 1)
-                winter.speak(response[random_no])
-            elif in_there(key.general_food_keywords, words):
-                response = res.general_food_responses
-                random_no = random.randint(0, len(response) - 1)
-                winter.speak(response[random_no])
+
             elif in_there(key.recommendation_movie_keywords, words):
                 response = res.simple_greetings_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.specific_food_keywords, words):
-                response = res.specific_food_responses
-                random_no = random.randint(0, len(response) - 1)
-                winter.speak(response[random_no])
-            elif in_there(key.general_technology_keywords, words):
-                response = res.general_technology_responses
-                random_no = random.randint(0, len(response) - 1)
-                winter.speak(response[random_no])
-            elif in_there(key.recommendation_technology_keywords, words):
-                response = res.recommendation_technology_responses
-                random_no = random.randint(0, len(response) - 1)
-                winter.speak(response[random_no])
-            elif in_there(key.specific_technology_keywords, words):
-                response = res.specific_technology_responses
+            elif in_there(key.file_manager_keywords, words):
+                response = res.filemanager_successful_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
             elif is_question(transcription):
