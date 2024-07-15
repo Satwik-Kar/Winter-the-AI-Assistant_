@@ -22,17 +22,6 @@ class Winter:
         self.rise_music_url = 'sounds/rise.mp3'
         self.fall_music_url = 'sounds/fall.mp3'
         self.is_awake = True
-        pygame.init()
-
-        # Screen dimensions
-        self.WIDTH, self.HEIGHT = 800, 600
-        self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
-        pygame.display.set_caption("AI Talking Visualization")
-
-        # Colors
-        self.BLACK = (0, 0, 0)
-        self.WHITE = (255, 255, 255)
-        self.BLUE = (0, 150, 255)
 
     class Dot:
         def __init__(self, x, y):
@@ -63,6 +52,17 @@ class Winter:
 
     def show_screen(self):
         running = True
+        pygame.init()
+
+        # Screen dimensions
+        WIDTH, HEIGHT = 800, 600
+        screen = pygame.display.set_mode((WIDTH, HEIGHT))
+        pygame.display.set_caption("AI Talking Visualization")
+
+        # Colors
+        BLACK = (0, 0, 0)
+        WHITE = (255, 255, 255)
+        BLUE = (0, 150, 255)
         clock = pygame.time.Clock()
         messages = ["Hello!", "I am Knox.", "How can I assist you today?", "Weather forecast is available.",
                     "Ask me anything!"]
@@ -73,49 +73,53 @@ class Winter:
         # Prepare text rendering
         font = pygame.font.SysFont(None, 48)
         text = ""
-        text_rect = pygame.Rect(self.WIDTH // 2, self.HEIGHT // 2, 0, 0)
+        text_rect = pygame.Rect(WIDTH // 2, HEIGHT // 2, 0, 0)
 
         # Create dots around the text
         dots = self.create_dots_around_text(text_rect)
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    self.kill()
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                self.kill()
+            # Clear the screen
+            screen.fill(BLACK)
 
-        # Clear the screen
-        self.screen.fill(self.BLACK)
+            # Draw dots and pulse them
+            for dot in dots:
+                dot.pulse()
+                dot.draw(screen)
 
-        # Draw dots and pulse them
-        for dot in dots:
-            dot.pulse()
-            dot.draw(self.screen)
+            # Update text typing effect
+            if char_index < len(messages[message_index]):
+                message_timer += 1
+                if message_timer > 5:  # Adjust the speed of the typing effect
+                    text += messages[message_index][char_index]
+                    char_index += 1
+                    message_timer = 0
+                text_surface = font.render(text, True, WHITE)
+                text_rect = text_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+                screen.blit(text_surface, text_rect)
+            else:
+                if message_timer > 120:  # Pause before showing the next message
+                    message_index = (message_index + 1) % len(messages)
+                    char_index = 0
+                    text = ""
+                    message_timer = 0
+                    dots = self.create_dots_around_text(text_rect)
 
-        # Update text typing effect
-        if char_index < len(messages[message_index]):
-            message_timer += 1
-            if message_timer > 5:  # Adjust the speed of the typing effect
-                text += messages[message_index][char_index]
-                char_index += 1
-                message_timer = 0
-            text_surface = font.render(text, True, self.WHITE)
-            text_rect = text_surface.get_rect(center=(self.WIDTH // 2, self.HEIGHT // 2))
-            self.screen.blit(text_surface, text_rect)
-        else:
-            if message_timer > 120:  # Pause before showing the next message
-                message_index = (message_index + 1) % len(messages)
-                char_index = 0
-                text = ""
-                message_timer = 0
-                dots = self.create_dots_around_text(text_rect)
+            # Update the display
+            pygame.display.flip()
 
-        # Update the display
-        pygame.display.flip()
-
-        # Cap the frame rate
-        clock.tick(60)
+            # Cap the frame rate
+            clock.tick(60)
 
     # Quit Pygame
+    def start_show_screen_thread(self):
+        show_screen_thread = threading.Thread(target=self.show_screen)
+        show_screen_thread.daemon = True  # Ensures the thread will close when the main program exits
+        show_screen_thread.start()
 
     def start(self):
         self.recognizer = sr.Recognizer()

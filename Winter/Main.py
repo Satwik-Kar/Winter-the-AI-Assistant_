@@ -156,7 +156,7 @@ def main(from_wake_word):
     ask_anything_else = True
 
     while True:
-        winter.show_screen()
+        winter.start_show_screen_thread()
 
         response = winter.recognize(is_next_round, ask_anything_else)
 
