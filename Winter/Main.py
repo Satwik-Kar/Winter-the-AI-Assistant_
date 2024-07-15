@@ -154,9 +154,8 @@ def main(from_wake_word):
         random_no = random.randint(0, len(questions) - 1)
         winter.speak(questions[random_no])
     ask_anything_else = True
-
+    winter.start_show_screen_thread()
     while True:
-        winter.start_show_screen_thread()
 
         response = winter.recognize(is_next_round, ask_anything_else)
 
@@ -219,11 +218,11 @@ def main(from_wake_word):
                 winter.speak(f"{response[random_no]}")
                 ask_anything_else = False
             elif in_there(key.time_based_greetings_keywords, words):
-                response = res.time_based_greetings_responses
+                response = res.formal_greetings_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
             elif in_there(key.inquiry_greetings_keywords, words):
-                response = res.inquiry_greetings_responses
+                response = res.formal_greetings_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
             elif in_there(key.formal_greetings_keywords, words):
@@ -398,8 +397,8 @@ def main(from_wake_word):
                 response = res.general_food_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.recommendation_food_keywords, words):
-                response = res.recommendation_food_responses
+            elif in_there(key.recommendation_movie_keywords, words):
+                response = res.simple_greetings_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
             elif in_there(key.specific_food_keywords, words):

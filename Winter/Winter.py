@@ -19,6 +19,7 @@ class Winter:
         self.recognizer = None
         self.name = "Winter"
         self.message = ""
+        self.status = "Listening..."
         self.version = "1.0"
         self.rise_music_url = 'sounds/rise.mp3'
         self.fall_music_url = 'sounds/fall.mp3'
@@ -58,7 +59,7 @@ class Winter:
         # Screen dimensions
         WIDTH, HEIGHT = 800, 600
         screen = pygame.display.set_mode((WIDTH, HEIGHT))
-        pygame.display.set_caption("AI Talking Visualization")
+        pygame.display.set_caption("WINTER")
 
         # Colors
         BLACK = (0, 0, 0)
@@ -72,14 +73,15 @@ class Winter:
 
         # Prepare text rendering
         font = pygame.font.SysFont(None, 48)
-        text = self.message
-        text_surface = font.render(text, True, WHITE)
-        text_rect = text_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2))
-
-        # Create dots around the text
-        dots = self.create_dots_around_text(text_rect)
 
         while running:
+            message_text_surface = font.render(self.message, True, WHITE)
+            status_text_surface = font.render(self.status, True, WHITE)
+            message_text_rect = message_text_surface.get_rect(center=(WIDTH // 2, HEIGHT // 1.2))
+            status_text_rect = status_text_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+            dots_rect = message_text_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+            # Create dots around the text
+            dots = self.create_dots_around_text(dots_rect)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -94,23 +96,28 @@ class Winter:
                 dot.draw(screen)
 
             # Update the display text
-            screen.blit(text_surface, text_rect)
+            screen.blit(message_text_surface, message_text_rect)
+            screen.blit(status_text_surface, status_text_rect)
 
             # Pause before showing the next message
             message_timer += 1
-            if message_timer > 240:  # Adjust the pause duration as needed
-                message_index = (message_index + 1) % len(messages)
-                text = self.message
-                text_surface = font.render(text, True, WHITE)
-                text_rect = text_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2))
-                dots = self.create_dots_around_text(text_rect)
-                message_timer = 0
+            # if message_timer > 240:  # Adjust the pause duration as needed
+            #     message_index = (message_index + 1) % len(messages)
+            #
+            #     message_text_surface = font.render(self.message, True, WHITE)
+            #     status_text_surface = font.render(self.status, True, WHITE)
+            #
+            #     message_text_rect = message_text_surface.get_rect(center=(WIDTH // 2, HEIGHT // 1.2))
+            #     status_text_rect = status_text_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+            #
+            #     dots = self.create_dots_around_text(status_text_rect)
+            #     message_timer = 0
 
             # Update the display
             pygame.display.flip()
 
             # Cap the frame rate
-            clock.tick(60)
+            clock.tick(120)
 
     # Quit Pygame
     def start_show_screen_thread(self):
@@ -186,6 +193,7 @@ class Winter:
                     self.speak(anything_else[random_no])
 
             self.recognizer.adjust_for_ambient_noise(source)
+            self.status = "Listening..."
             print("Listening...")
             self.__play(self.rise_music_url)
             audio = self.recognizer.listen(source)
@@ -202,7 +210,7 @@ class Winter:
                 response["error"] = "API unavailable"
             except sr.UnknownValueError:
                 response["error"] = "Unable to recognize speech"
-
+            self.status = "Thinking..."
             return response
 
     def sleep(self):
