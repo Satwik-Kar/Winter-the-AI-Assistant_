@@ -18,6 +18,7 @@ class Winter:
         self.microphone = None
         self.recognizer = None
         self.name = "Winter"
+        self.message = ""
         self.version = "1.0"
         self.rise_music_url = 'sounds/rise.mp3'
         self.fall_music_url = 'sounds/fall.mp3'
@@ -92,10 +93,10 @@ class Winter:
                 dot.draw(screen)
 
             # Update text typing effect
-            if char_index < len(messages[message_index]):
+            if char_index < len(self.message):
                 message_timer += 1
                 if message_timer > 5:  # Adjust the speed of the typing effect
-                    text += messages[message_index][char_index]
+                    text += self.message[char_index]
                     char_index += 1
                     message_timer = 0
                 text_surface = font.render(text, True, WHITE)
@@ -145,9 +146,9 @@ class Winter:
         index = random.randint(0, len(welcome_lines) - 1)
         return welcome_lines[index]
 
-    @staticmethod
-    def speak(text):
+    def speak(self, text):
         try:
+            self.message = text
             tts = gTTS(text=text, lang="en-IN")
             audio_fp = io.BytesIO()
             tts.write_to_fp(audio_fp)
@@ -191,7 +192,7 @@ class Winter:
             self.recognizer.adjust_for_ambient_noise(source)
             print("Listening...")
             self.__play(self.rise_music_url)
-            audio = self.recognizer.listen(source, timeout=10)
+            audio = self.recognizer.listen(source)
 
             response = {
                 "success": True,
