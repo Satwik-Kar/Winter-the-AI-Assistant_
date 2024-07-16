@@ -11,7 +11,7 @@ from Winter import Winter
 import os
 import keywords as key
 import responses as res
-from transformers import pipeline
+from transformers import pipeline, AutoModelForSeq2SeqLM, AutoTokenizer
 
 location = geocoder.ip('me')
 weather_data = None
@@ -50,18 +50,21 @@ def main(from_wake_word):
 
     def question_answering(question):
         try:
+            model = AutoModelForSeq2SeqLM.from_pretrained("google/flan-t5-large")
+            tokenizer = AutoTokenizer.from_pretrained("google/flan-t5-large")
 
-            # Load the pipeline with the text2text-generation task
-            pipe = pipeline("text2text-generation", model="google/flan-t5-large", device=0)
-            with open("intelligence/intelligence.txt", 'r') as file:
-                # Step 2: Read the entire content of the file
-                file_content = file.read()
-            input_text = f"question={question} context={file_content}"
-
-            # Get the answer
-            result = pipe(input_text, max_length=128, num_return_sequences=1)
-            # Print the result
-            return result[0]['generated_text']
+            inputs = tokenizer(question, return_tensors="pt")
+            outputs = model.generate(**inputs)
+            result = tokenizer.batch_decode(outputs, skip_special_tokens=True)
+            # with open("intelligence/intelligence.txt", 'r') as file:
+            #     # Step 2: Read the entire content of the file
+            #     file_content = file.read()
+            # input_text = f"question={question} context={file_content}"
+            #
+            # # Get the answer
+            # result = pipe(input_text, max_length=128, num_return_sequences=1)
+            # # Print the result
+            return result[0]
         except Exception as e:
             print(f"Error loading model or generating text: {e}")
 
@@ -169,6 +172,15 @@ def main(from_wake_word):
             words = transcription.lower()
             print(words)
             if "none" in words:
+
+                winter.sleep()
+
+                break
+
+            elif in_there(key.introduce_keywords, words) and in_there(key.stop_keywords, words):
+                winter.speak("I detected conflicting commands. Please clarify.")
+
+            elif in_there(key.file_manager_keywords, words):
                 def open_file_manager(path="."):
                     # Get the absolute path
                     abs_path = os.path.abspath(path)
@@ -178,22 +190,28 @@ def main(from_wake_word):
                     try:
                         if system == "Windows":
                             os.startfile(abs_path)
+                            response = res.filemanager_successful_responses
+                            random_no = random.randint(0, len(response) - 1)
+                            winter.speak(response[random_no])
                         elif system == "Darwin":  # macOS
                             subprocess.run(["open", abs_path])
+                            response = res.filemanager_successful_responses
+                            random_no = random.randint(0, len(response) - 1)
+                            winter.speak(response[random_no])
                         elif system == "Linux":
                             subprocess.run(["xdg-open", abs_path])
+                            response = res.filemanager_successful_responses
+                            random_no = random.randint(0, len(response) - 1)
+                            winter.speak(response[random_no])
                         else:
+                            response = res.filemanager_unsuccessful_responses
+                            random_no = random.randint(0, len(response) - 1)
+                            winter.speak(response[random_no])
                             raise NotImplementedError(f"Unsupported platform: {system}")
                     except Exception as e:
                         print(f"Failed to open file manager: {e}")
 
                 open_file_manager()
-                winter.sleep()
-
-                break
-
-            elif in_there(key.introduce_keywords, words) and in_there(key.stop_keywords, words):
-                winter.speak("I detected conflicting commands. Please clarify.")
 
             elif in_there(key.introduce_keywords, words):
                 winter.speak(f"I am {winter.name}! Your assistant.")
@@ -297,17 +315,17 @@ def main(from_wake_word):
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
             elif in_there(key.current_weather_keywords, words):
-                response = res.current_weather_responses
+                fetch_weather()
+                response = [
+                    f"The current weather is {weather_data['weather'][0]['description']} with a temperature of {kelvin_to_celsius(weather_data['main']['temp'])} degrees Celsius.",
+                    f"It's currently {weather_data['weather'][0]['description']} and {kelvin_to_celsius(weather_data['main']['temp'])} degrees Celsius.",
+                    f"The weather right now is {weather_data['weather'][0]['description']} with a temperature of {kelvin_to_celsius(weather_data['main']['temp'])} degrees Celsius.",
+                    f"Currently, it's {weather_data['weather'][0]['description']} and {kelvin_to_celsius(weather_data['main']['temp'])} degrees Celsius."
+                ]
+
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.future_weather_keywords, words):
-                response = res.future_weather_responses
-                random_no = random.randint(0, len(response) - 1)
-                winter.speak(response[random_no])
-            elif in_there(key.weather_conditions_keywords, words):
-                response = res.weather_conditions_responses
-                random_no = random.randint(0, len(response) - 1)
-                winter.speak(response[random_no])
+
             elif in_there(key.simple_help_keywords, words):
                 response = res.simple_help_responses
                 random_no = random.randint(0, len(response) - 1)
@@ -423,6 +441,5 @@ def main(from_wake_word):
 
 
 if __name__ == "__main__":
-    # fetch_weather()
     assistant_thread = threading.Thread(target=main, args=(False,))
     assistant_thread.start()
