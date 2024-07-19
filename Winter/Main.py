@@ -1,5 +1,6 @@
 import datetime
 import platform
+import re
 import subprocess
 import threading
 
@@ -168,19 +169,18 @@ def main(from_wake_word):
         if response["success"]:
             transcriptionFormatted = str(format_transcription(response["transcription"]))
             transcription = str(response["transcription"])
-            winter.speak("You said: " + transcriptionFormatted)
-            words = transcription.lower()
-            print(words)
-            if "none" in words:
-
+            # winter.speak("You said: " + transcriptionFormatted)
+            string_transcription = transcription.lower()
+            print(string_transcription)
+            if "none" in string_transcription:
                 winter.sleep()
-
                 break
 
-            elif in_there(key.introduce_keywords, words) and in_there(key.stop_keywords, words):
+            elif in_there(key.introduce_keywords, string_transcription) and in_there(key.stop_keywords,
+                                                                                     string_transcription):
                 winter.speak("I detected conflicting commands. Please clarify.")
 
-            elif in_there(key.file_manager_keywords, words):
+            elif in_there(key.file_manager_keywords, string_transcription):
                 def open_file_manager(path="."):
                     # Get the absolute path
                     abs_path = os.path.abspath(path)
@@ -212,18 +212,32 @@ def main(from_wake_word):
                         print(f"Failed to open file manager: {e}")
 
                 open_file_manager()
+            elif in_there(key.plus_days_keywords, string_transcription):
+                days = re.findall(r'\d+', string_transcription)
+                if 0 < len(days) < 2:
+                    today = datetime.datetime.now()
 
-            elif in_there(key.introduce_keywords, words):
+                    future_date = today + datetime.timedelta(days=int(days[0]))
+
+                    month_name = future_date.strftime("%B")
+                    month_day = future_date.strftime("%d")
+
+                    winter.speak(f"{days[0]} days from now, it will be, {month_day} of {month_name}")
+                else:
+                    winter.speak(
+                        "I am currently getting two number of days to add on from today. Could you please try again...")
+
+            elif in_there(key.introduce_keywords, string_transcription):
                 winter.speak(f"I am {winter.name}! Your assistant.")
 
-            elif in_there(key.stop_keywords, words):
+            elif in_there(key.stop_keywords, string_transcription):
                 winter.sleep()
                 break
-            elif in_there(key.kill_keywords, words):
+            elif in_there(key.kill_keywords, string_transcription):
                 winter.speak("Killing my service.")
                 winter.kill()
                 sys.exit()
-            elif in_there(key.asking_time_keywords, words):
+            elif in_there(key.asking_time_keywords, string_transcription):
                 now = datetime.datetime.now()
                 hour = now.strftime("%I")
                 minute = now.strftime("%M")
@@ -235,12 +249,12 @@ def main(from_wake_word):
                     speakable_time = f"It's {hour}:{minute} {am_pm}."
 
                 winter.speak(speakable_time)
-            elif in_there(key.asking_day_keywords, words):
+            elif in_there(key.asking_day_keywords, string_transcription):
                 now = datetime.datetime.now()
                 day = now.strftime("%A")
                 winter.speak(f"Today is {day}.")
 
-            elif in_there(key.asking_date_keywords, words):
+            elif in_there(key.asking_date_keywords, string_transcription):
                 now = datetime.datetime.now()
                 day = now.strftime("%d").lstrip('0')
                 month = now.strftime("%B")
@@ -248,73 +262,73 @@ def main(from_wake_word):
 
                 speakable_date = f"Today is {month} {day}, {year}."
                 winter.speak(speakable_date)
-            elif in_there(key.asking_year_keywords, words):
+            elif in_there(key.asking_year_keywords, string_transcription):
                 now = datetime.datetime.now()
                 year = now.strftime("%Y")
                 winter.speak(f"The current year is {year}.")
 
-            elif in_there(key.simple_greetings_keywords, words):
+            elif in_there(key.simple_greetings_keywords, string_transcription):
                 response = res.simple_greetings_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(f"{response[random_no]}")
                 ask_anything_else = False
-            elif in_there(key.time_based_greetings_keywords, words):
+            elif in_there(key.time_based_greetings_keywords, string_transcription):
                 response = res.formal_greetings_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.inquiry_greetings_keywords, words):
+            elif in_there(key.inquiry_greetings_keywords, string_transcription):
                 response = res.formal_greetings_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.formal_greetings_keywords, words):
+            elif in_there(key.formal_greetings_keywords, string_transcription):
                 response = res.formal_greetings_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.simple_thanks_keywords, words):
+            elif in_there(key.simple_thanks_keywords, string_transcription):
                 response = res.simple_thanks_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.emphatic_thanks_keywords, words):
+            elif in_there(key.emphatic_thanks_keywords, string_transcription):
                 response = res.emphatic_thanks_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.appreciation_keywords, words):
+            elif in_there(key.appreciation_keywords, string_transcription):
                 response = res.appreciation_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.simple_apology_keywords, words):
+            elif in_there(key.simple_apology_keywords, string_transcription):
                 response = res.simple_apology_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.formal_apology_keywords, words):
+            elif in_there(key.formal_apology_keywords, string_transcription):
                 response = res.formal_apology_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.simple_confirmation_keywords, words):
+            elif in_there(key.simple_confirmation_keywords, string_transcription):
                 response = res.simple_confirmation_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.emphatic_confirmation_keywords, words):
+            elif in_there(key.emphatic_confirmation_keywords, string_transcription):
                 response = res.emphatic_confirmation_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.formal_confirmation_keywords, words):
+            elif in_there(key.formal_confirmation_keywords, string_transcription):
                 response = res.formal_confirmation_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.simple_rejection_keywords, words):
+            elif in_there(key.simple_rejection_keywords, string_transcription):
                 response = res.simple_rejection_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.emphatic_rejection_keywords, words):
+            elif in_there(key.emphatic_rejection_keywords, string_transcription):
                 response = res.emphatic_rejection_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.polite_rejection_keywords, words):
+            elif in_there(key.polite_rejection_keywords, string_transcription):
                 response = res.polite_rejection_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.current_weather_keywords, words):
+            elif in_there(key.current_weather_keywords, string_transcription):
                 fetch_weather()
                 response = [
                     f"The current weather is {weather_data['weather'][0]['description']} with a temperature of {kelvin_to_celsius(weather_data['main']['temp'])} degrees Celsius.",
@@ -326,108 +340,108 @@ def main(from_wake_word):
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
 
-            elif in_there(key.simple_help_keywords, words):
+            elif in_there(key.simple_help_keywords, string_transcription):
                 response = res.simple_help_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.request_help_keywords, words):
+            elif in_there(key.request_help_keywords, string_transcription):
                 response = res.request_help_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.polite_help_keywords, words):
+            elif in_there(key.polite_help_keywords, string_transcription):
                 response = res.polite_help_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.general_feedback_keywords, words):
+            elif in_there(key.general_feedback_keywords, string_transcription):
                 response = res.general_feedback_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.criticism_keywords, words):
+            elif in_there(key.criticism_keywords, string_transcription):
                 response = res.criticism_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.advice_keywords, words):
+            elif in_there(key.advice_keywords, string_transcription):
                 response = res.advice_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.current_location_keywords, words):
+            elif in_there(key.current_location_keywords, string_transcription):
                 response = res.current_location_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.find_location_keywords, words):
+            elif in_there(key.find_location_keywords, string_transcription):
                 response = res.find_location_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.specific_location_keywords, words):
+            elif in_there(key.specific_location_keywords, string_transcription):
                 response = res.specific_location_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.basic_personal_info_keywords, words):
+            elif in_there(key.basic_personal_info_keywords, string_transcription):
                 response = res.basic_personal_info_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.origin_personal_info_keywords, words):
+            elif in_there(key.origin_personal_info_keywords, string_transcription):
                 response = res.origin_personal_info_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.professional_personal_info_keywords, words):
+            elif in_there(key.professional_personal_info_keywords, string_transcription):
                 response = res.professional_personal_info_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.interest_personal_info_keywords, words):
+            elif in_there(key.interest_personal_info_keywords, string_transcription):
                 response = res.interest_personal_info_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.general_jokes_keywords, words):
+            elif in_there(key.general_jokes_keywords, string_transcription):
                 response = res.general_jokes_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.specific_jokes_keywords, words):
+            elif in_there(key.specific_jokes_keywords, string_transcription):
                 response = res.specific_jokes_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.general_news_keywords, words):
+            elif in_there(key.general_news_keywords, string_transcription):
                 response = res.general_news_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.specific_news_keywords, words):
+            elif in_there(key.specific_news_keywords, string_transcription):
                 response = res.specific_news_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.general_music_keywords, words):
+            elif in_there(key.general_music_keywords, string_transcription):
                 response = res.general_music_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.specific_music_keywords, words):
+            elif in_there(key.specific_music_keywords, string_transcription):
                 response = res.specific_music_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.music_preference_keywords, words):
+            elif in_there(key.music_preference_keywords, string_transcription):
                 response = res.music_preference_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.general_sports_keywords, words):
+            elif in_there(key.general_sports_keywords, string_transcription):
                 response = res.general_sports_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.sports_updates_keywords, words):
+            elif in_there(key.sports_updates_keywords, string_transcription):
                 response = res.general_sports_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.sports_entities_keywords, words):
+            elif in_there(key.sports_entities_keywords, string_transcription):
                 response = res.general_sports_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.specific_sports_keywords, words):
+            elif in_there(key.specific_sports_keywords, string_transcription):
                 response = res.general_sports_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
 
-            elif in_there(key.recommendation_movie_keywords, words):
+            elif in_there(key.recommendation_movie_keywords, string_transcription):
                 response = res.simple_greetings_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])
-            elif in_there(key.file_manager_keywords, words):
+            elif in_there(key.file_manager_keywords, string_transcription):
                 response = res.filemanager_successful_responses
                 random_no = random.randint(0, len(response) - 1)
                 winter.speak(response[random_no])

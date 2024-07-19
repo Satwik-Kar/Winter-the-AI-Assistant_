@@ -440,7 +440,23 @@ polite_rejection_responses = [
     "Maybe another time.",
     "I'll pass."
 ]
-
+goodbye_greetings = [
+    "Goodbye! Have a wonderful day!",
+    "See you later! Take care!",
+    "Farewell! Stay safe!",
+    "Goodbye! Hope to assist you again soon!",
+    "Take care! See you next time!",
+    "Goodbye! Don't hesitate to return if you need anything!",
+    "Farewell! Have a great time!",
+    "Goodbye! Wishing you all the best!",
+    "See you soon! Stay well!",
+    "Goodbye! Thanks for stopping by!",
+    "Take care! Looking forward to our next interaction!",
+    "Goodbye! Have a fantastic day!",
+    "Farewell! Until we meet again!",
+    "Goodbye! Stay positive and happy!",
+    "See you later! Enjoy your day!"
+]
 # Current Weather Responses
 current_weather_responses = [
     "The current weather is {weather_condition} with a temperature of {temperature} degrees Celsius.",

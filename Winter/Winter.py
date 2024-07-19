@@ -1,8 +1,11 @@
 import io
 import math
+import platform
 import random
+import subprocess
 import sys
 
+import boto3
 import pygame
 from gtts import gTTS
 from playsound import playsound
@@ -11,6 +14,9 @@ import threading
 import speech_recognition as sr
 from pydub import AudioSegment
 from pydub.playback import play
+
+import keywords
+import responses
 
 
 class Winter:
@@ -136,14 +142,20 @@ class Winter:
         try:
             self.status = "Speaking..."
             self.message = text
-            tts = gTTS(text=text, lang="en-IN")
-            audio_fp = io.BytesIO()
-            tts.write_to_fp(audio_fp)
-            audio_fp.seek(0)
+            try:
+                # Construct the espeak-ng command
+                command = f'espeak-ng -ven-us+f5 -s170 "{text}"'
 
-            audio = AudioSegment.from_file(audio_fp, format="mp3")
-            play(audio)
+                # Run the command using subprocess
+                subprocess.run(command, shell=True, check=True)
+
+            except subprocess.CalledProcessError as e:
+                print(f"Error running espeak-ng command: {e}")
+                print("Need to install espeak-ng for the system to run this program!")
+                sys.exit(1)
+
             print(text)
+
         except Exception as e:
             print(e)
 
@@ -156,23 +168,7 @@ class Winter:
 
             if next_round:
                 if ask_anything_else:
-                    anything_else = [
-                        "Is there anything else I can help you with?",
-                        "Do you need assistance with anything else?",
-                        "Can I assist you with something else?",
-                        "Is there anything more you need?",
-                        "Do you need help with anything else?",
-                        "Is there anything further you require?",
-                        "Anything else you'd like assistance with?",
-                        "Do you have any other requests?",
-                        "Is there something more I can do for you?",
-                        "Any other questions or concerns?",
-                        "Would you like help with anything else?",
-                        "Is there another way I can assist you?",
-                        "Do you have any other needs?",
-                        "Anything else I can support you with?",
-                        "Do you need anything else from me?"
-                    ]
+                    anything_else = keywords.anything_else
                     random_no = random.randint(0, len(anything_else) - 1)
                     self.speak(anything_else[random_no])
 
@@ -223,23 +219,7 @@ class Winter:
                 continue
 
     def kill(self):
-        goodbye_greetings = [
-            "Goodbye! Have a wonderful day!",
-            "See you later! Take care!",
-            "Farewell! Stay safe!",
-            "Goodbye! Hope to assist you again soon!",
-            "Take care! See you next time!",
-            "Goodbye! Don't hesitate to return if you need anything!",
-            "Farewell! Have a great time!",
-            "Goodbye! Wishing you all the best!",
-            "See you soon! Stay well!",
-            "Goodbye! Thanks for stopping by!",
-            "Take care! Looking forward to our next interaction!",
-            "Goodbye! Have a fantastic day!",
-            "Farewell! Until we meet again!",
-            "Goodbye! Stay positive and happy!",
-            "See you later! Enjoy your day!"
-        ]
+        goodbye_greetings = responses.goodbye_greetings
         random_no = random.randint(0, len(goodbye_greetings) - 1)
         self.speak(goodbye_greetings[random_no])
         playsound(self.fall_music_url)

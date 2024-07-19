@@ -46,7 +46,22 @@ file_manager_keywords = {
     "open directory",
     "open folder"
 }
-
+plus_days_keywords = {
+    "in days",
+    "days from now",
+    "after days",
+    "next days",
+    "in the next days",
+    "upcoming days",
+    "days later"
+}
+minus_days_keywords = {
+    "days ago",
+    "days before",
+    "days earlier",
+    "previous days",
+    "in the past days"
+}
 inquiry_greetings_keywords = {
     "how are you", "how's it going", "what's up"
 }
@@ -382,3 +397,19 @@ physical_hobbies_keywords = {
 intellectual_hobbies_keywords = {
     "reading", "collecting"
 }
+
+anything_else = ["Is there anything else I can help you with?",
+                 "Do you need assistance with anything else?",
+                 "Can I assist you with something else?",
+                 "Is there anything more you need?",
+                 "Do you need help with anything else?",
+                 "Is there anything further you require?",
+                 "Anything else you'd like assistance with?",
+                 "Do you have any other requests?",
+                 "Is there something more I can do for you?",
+                 "Any other questions or concerns?",
+                 "Would you like help with anything else?",
+                 "Is there another way I can assist you?",
+                 "Do you have any other needs?",
+                 "Anything else I can support you with?",
+                 "Do you need anything else from me?"]
