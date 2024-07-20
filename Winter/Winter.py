@@ -1,4 +1,5 @@
 import io
+import json
 import math
 import platform
 import random
@@ -14,6 +15,7 @@ import threading
 import speech_recognition as sr
 from pydub import AudioSegment
 from pydub.playback import play
+from vosk import Model, KaldiRecognizer
 
 import keywords
 import responses
@@ -178,20 +180,30 @@ class Winter:
             self.__play(self.rise_music_url)
             audio = self.recognizer.listen(source)
 
-            response = {
-                "success": True,
-                "error": None,
-                "transcription": None
-            }
+            global response
             try:
-                response["transcription"] = self.recognizer.recognize_google(audio)
-            except sr.RequestError:
-                response["success"] = False
-                response["error"] = "API unavailable"
+                response = self.recognizer.recognize_google(audio)
+                return response
             except sr.UnknownValueError:
-                response["error"] = "Unable to recognize speech"
+                print("Google Speech Recognition could not understand audio")
+            except Exception as e:
+                print("Could not request results from Google Speech Recognition service")
+
             self.status = "Thinking..."
-            return response
+        # Fallback to Vosk for offline recognition
+        vosk_model_path = "models/offline_speech_recognition/vosk-model-small-en-us-0.15"
+        vosk_model = Model(vosk_model_path)
+        print("Falling back to Vosk for offline recognition...")
+        audio_data = audio.get_raw_data()
+        recognizer_vosk = KaldiRecognizer(vosk_model, 16000)
+        if recognizer_vosk.AcceptWaveform(audio_data):
+            result = json.loads(recognizer_vosk.Result())
+            text = result.get("text", "")
+            print("Vosk thinks you said: " + text)
+            return text
+        else:
+            print("Vosk could not recognize the audio")
+            return "none"
 
     def sleep(self):
         self.__play(self.fall_music_url)
