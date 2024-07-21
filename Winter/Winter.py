@@ -180,7 +180,6 @@ class Winter:
             self.__play(self.rise_music_url)
             audio = self.recognizer.listen(source)
 
-            global response
             try:
                 response = self.recognizer.recognize_google(audio)
                 return response
@@ -190,20 +189,9 @@ class Winter:
                 print("Could not request results from Google Speech Recognition service")
 
             self.status = "Thinking..."
-        # Fallback to Vosk for offline recognition
-        vosk_model_path = "models/offline_speech_recognition/vosk-model-small-en-us-0.15"
-        vosk_model = Model(vosk_model_path)
-        print("Falling back to Vosk for offline recognition...")
-        audio_data = audio.get_raw_data()
-        recognizer_vosk = KaldiRecognizer(vosk_model, 16000)
-        if recognizer_vosk.AcceptWaveform(audio_data):
-            result = json.loads(recognizer_vosk.Result())
-            text = result.get("text", "")
-            print("Vosk thinks you said: " + text)
-            return text
-        else:
-            print("Vosk could not recognize the audio")
-            return "none"
+            # Fallback to Vosk for offline recognition
+            response_offline = self.recognizer.recognize_vosk(audio)
+            return response_offline
 
     def sleep(self):
         self.__play(self.fall_music_url)
@@ -227,8 +215,13 @@ class Winter:
                     Main.main(from_wake_word=True)
             except sr.UnknownValueError:
                 continue
-            except sr.RequestError:
-                continue
+            except Exception as e:  # for offline
+                transcription = self.recognizer.recognize_vosk(audio).lower()
+                print(transcription)
+                if self.name.lower() in transcription:
+                    self.is_awake = True
+                    import Main
+                    Main.main(from_wake_word=True)
 
     def kill(self):
         goodbye_greetings = responses.goodbye_greetings
