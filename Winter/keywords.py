@@ -1,3 +1,22 @@
+questions = [
+            "What can I do for you today?",
+            "How may I assist you?",
+            "Is there anything you need help with?",
+            "How can I be of service?",
+            "What do you need assistance with?",
+            "How can I assist you today?",
+            "What would you like help with?",
+            "How can I support you?",
+            "What can I help you with?",
+            "Is there something I can assist you with?",
+            "What do you need help with today?",
+            "How can I assist you at the moment?",
+            "What can I do for you right now?",
+            "Do you need any help?",
+            "Is there anything I can help you with?"
+        ]
+
+
 introduce_keywords = {
     "name", "who are", "call", "introduce", "yourself", "ai"
 }
